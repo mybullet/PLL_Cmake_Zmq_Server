@@ -1,6 +1,7 @@
 
 #include "zmqserver.h"
-
+#include <QDir>
+#include <fstream>
 ZmqServer::ZmqServer(QObject *parent)
     : QThread{parent}
 {
