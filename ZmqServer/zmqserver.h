@@ -1,6 +1,6 @@
+#pragma once
 
-#ifndef ZMQSERVER_H
-#define ZMQSERVER_H
+
 
 #include <QThread>
 #include <QDebug>
@@ -29,7 +29,7 @@ public:
     std::string encrypt(const std::string& message, const std::string& key);
     std::string decrypt(const std::string& encryptedMessage, const std::string& key);
     std::string GetRealtimeStr();
-    void CreateIpcFile();
+    std::string CreateIpcFile();
 
 signals:
     void SignalReceivedMsg(std::string msg);
@@ -41,4 +41,4 @@ private:
     bool m_is_running = false;
 };
 
-#endif // ZMQSERVER_H
+

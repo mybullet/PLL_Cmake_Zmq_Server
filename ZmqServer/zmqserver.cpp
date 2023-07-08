@@ -2,6 +2,9 @@
 #include "zmqserver.h"
 #include <QDir>
 #include <fstream>
+#include <iostream>
+#include <cstdlib>
+
 ZmqServer::ZmqServer(QObject *parent)
     : QThread{parent}
 {
@@ -10,24 +13,46 @@ ZmqServer::ZmqServer(QObject *parent)
 
 void ZmqServer::init(std::string replyer_connect_str, std::string publisher_connect_str)
 {
-    CreateIpcFile();
+
+    //m_publisher_connect_str = "ipc://" + CreateIpcFile();
+    //std::cout<< "ipc con str : " << m_publisher_connect_str;
     m_replyer_connect_str = replyer_connect_str;
     m_publisher_connect_str = publisher_connect_str;
     m_is_running = true;
 }
 
-//在当前可执行路径下创建一个名为tmp的文件夹，以及一个名为test.ipc的文件
-void ZmqServer::CreateIpcFile()
+std::string ZmqServer::CreateIpcFile()
 {
     QDir dir;
-    if (!dir.exists("./tmp"))
-    {
-        dir.mkdir("./tmp");
-    }
 
-    std::ofstream file("./tmp/test.ipc");
+    const char* user = std::getenv("USER");
+    std::string path = "/tmp";
+    // if (user != nullptr) {
+    //     path = "/home/" + std::string(user) + "/tmp";
+        
+
+    //     if (!dir.exists(QString::fromStdString(path)))   
+    //     {
+    //         dir.mkdir(QString::fromStdString(path));
+    //     }
+
+    // } else {
+    //     std::cerr << "Failed to get user" << std::endl;
+        
+    //     if (!dir.exists("../../../../tmp"))
+    //     {
+    //         dir.mkdir("../../../../tmp");
+    //     }
+    //     path = "../../../../tmp";
+    // }
+
+    path += "/test.ipc";
+    std::ofstream file(path);
     file.close();
-    
+
+    std::cout << "ipc file path : "<< path << std::endl;
+
+    return path;
 }
 
 void ZmqServer::run()
@@ -41,11 +66,15 @@ void ZmqServer::run()
         int keyLength = 32; // 32 字节
         std::string key = generateRandomKey(keyLength);
 
-        qDebug() << QString::fromStdString("new generated key : " + key);
+        std::cout << QString::fromStdString("new generated key : " + key).toStdString();
 
 
-        replyer.bind("tcp://192.168.3.5:7777");
-        publisher.bind("ipc://./tmp/test.ipc");
+        replyer.bind(m_replyer_connect_str.c_str());
+        std::cout << "finish bind reply";
+
+        std::cout << m_publisher_connect_str.c_str();
+        publisher.bind(m_publisher_connect_str.c_str());
+        std::cout << "finish bind publish";
 
         zmq::message_t request;
         std::string reply;
@@ -68,7 +97,7 @@ void ZmqServer::run()
             }
             else
             {
-                qDebug() << QString::fromStdString("Received origin message from working-client: " + message);
+                std::cout << QString::fromStdString("Received origin message from working-client: " + message).toStdString();
                 message = decrypt(message, key);
                 if (message.find("LOCAL@") == 0)
                 {
@@ -87,17 +116,17 @@ void ZmqServer::run()
 
                     emit SignalReceivedMsg(http_message_str);
 
-                    qDebug() << QString::fromStdString("Send Message to Http server: " + http_message_str);
+                    std::cout << QString::fromStdString("Send Message to Http server: " + http_message_str).toStdString();
                 }
                 else
                 {
-                    qDebug() << QString::fromStdString("Received invalid message from working-client: " + message);
+                    std::cout << QString::fromStdString("Received invalid message from working-client: " + message).toStdString();
                     continue;
                 }
             }
 
 
-            qDebug() << QString::fromStdString("Received message from working-client: " + message);
+            std::cout << QString::fromStdString("Received message from working-client: " + message).toStdString();
 
             QThread::msleep(250);
         }
@@ -105,7 +134,7 @@ void ZmqServer::run()
     }
     catch(const std::exception& e)
     {
-        qDebug() << "gggggggggg"<< e.what() << '\n';
+        std::cout << "gggggggggg"<< e.what() << '\n';
     }
 
     replyer.close();

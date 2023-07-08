@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
-    Dao dao("data_source_0625");
+    Dao dao("db0625");
     QThread thread;
     dao.moveToThread(&thread);
 
@@ -35,7 +35,8 @@ int main(int argc, char *argv[])
 
 
     ZmqServer zmq_server;
-    zmq_server.init("tcp://192.168.3.5:7777", "ipc://./tmp/test.ipc");
+    zmq_server.init("tcp://192.168.181.132:7777", "ipc:///tmp/test.ipc"); 
+    //zmq_server.init("tcp://192.168.181.132:7777", "tcp://127.0.0.1:6666");
 
     zmq_server.start();
 
