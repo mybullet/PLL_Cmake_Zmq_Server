@@ -18,6 +18,12 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(SOURCES  main.cpp
+dao.h dao.cpp
+zmqserver.h zmqserver.cpp)
+
+set(CMAKE_PREFIX_PATH "/usr/local/Qt-6.2.4" ${CMAKE_PREFIX_PATH})
+
 
 find_package(Qt6 COMPONENTS Sql REQUIRED)
 
@@ -25,28 +31,22 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libzmq/include ${CMAKE_CURRENT_SOURCE_DIR}/OpenSSL/include)
+find_package(OpenSSL REQUIRED)
 
+include_directories(/usr/include/mysql)
 
-add_executable(ZmqServer
+add_executable(${PROJECT_NAME}
 
-  main.cpp
-  dao.h dao.cpp
-  zmqserver.h zmqserver.cpp
+  ${SOURCES}
 )
 
-target_link_libraries(ZmqServer Qt${QT_VERSION_MAJOR}::Core
-    ${CMAKE_CURRENT_SOURCE_DIR}/libzmq/lib/libzmq-v142-mt-4_3_5.lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/OpenSSL/lib/libcrypto.lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/OpenSSL/lib/libssl.lib
-    crypt32.lib advapi32.lib ws2_32.lib user32.lib
+target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core
+    OpenSSL::SSL OpenSSL::Crypto
     Qt6::Sql
+    zmq
+    stdc++
 )
 
 
 
-
-install(TARGETS ZmqServer
-
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR})
 
