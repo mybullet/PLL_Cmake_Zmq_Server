@@ -25,5 +25,5 @@ jobs:
       
       - name: Build and push Docker image
         run: |
-          docker build -t caoyzsilence/http:latest .
-          docker push caoyzsilence/http:latest
+          docker build -t caoyzsilence/zmq:latest .
+          docker push caoyzsilence/zmq:latest
