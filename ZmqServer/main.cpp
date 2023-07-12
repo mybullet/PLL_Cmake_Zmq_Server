@@ -20,6 +20,9 @@ int main(int argc, char *argv[])
 {
     QCoreApplication app(argc, argv);
 
+    qRegisterMetaType<std::string>("std::string");
+
+
     Dao dao("db0625");
     QThread thread;
     dao.moveToThread(&thread);
@@ -35,7 +38,8 @@ int main(int argc, char *argv[])
 
 
     ZmqServer zmq_server;
-    zmq_server.init("tcp://192.168.181.132:7777", "ipc:///tmp/test.ipc"); 
+    zmq_server.init("tcp://*:7777", "tcp://*:55555"); 
+    //zmq_server.init("tcp://*:7777", "ipc:///app/tmp/test.ipc"); 
     //zmq_server.init("tcp://192.168.181.132:7777", "tcp://127.0.0.1:6666");
 
     zmq_server.start();

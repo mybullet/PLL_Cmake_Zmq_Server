@@ -1,4 +1,0 @@
-/home/cyz/local_repository/PPL_Cmake_Zmq_Server/ZmqServer/build/CMakeFiles/ZmqServer.dir
-/home/cyz/local_repository/PPL_Cmake_Zmq_Server/ZmqServer/build/CMakeFiles/edit_cache.dir
-/home/cyz/local_repository/PPL_Cmake_Zmq_Server/ZmqServer/build/CMakeFiles/rebuild_cache.dir
-/home/cyz/local_repository/PPL_Cmake_Zmq_Server/ZmqServer/build/CMakeFiles/ZmqServer_autogen.dir
