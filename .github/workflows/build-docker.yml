@@ -1,0 +1,29 @@
+name: Auto Merge Dev to Main and Build Docker Image
+
+on:
+  workflow_run:
+    workflows: ["Auto Merge Dev to Main"]
+    types:
+      - completed
+
+jobs:
+  build_and_push_image:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: caoyzsilence
+          password: qwer1234@@
+      
+      - name: Build and push Docker image
+        run: |
+          docker build -t caoyzsilence/http:latest .
+          docker push caoyzsilence/http:latest
