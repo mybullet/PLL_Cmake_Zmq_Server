@@ -1,18 +1,12 @@
 cmake_minimum_required(VERSION 3.14)
 
-
-
 project(ZmqServer LANGUAGES CXX)
-
-
 
 set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_AUTOMOC ON)
 
 set(CMAKE_AUTORCC ON)
-
-
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -24,10 +18,11 @@ zmqserver.h zmqserver.cpp)
 
 set(CMAKE_PREFIX_PATH "/usr/local/Qt-6.2.4" ${CMAKE_PREFIX_PATH})
 
+# find_package(Qt6 COMPONENTS Sql REQUIRED)
+find_package(Qt5 COMPONENTS Sql REQUIRED)
 
-find_package(Qt6 COMPONENTS Sql REQUIRED)
-
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+# find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
+find_package(QT NAMES Qt5 REQUIRED COMPONENTS Core)
 
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core)
 
@@ -42,11 +37,8 @@ add_executable(${PROJECT_NAME}
 
 target_link_libraries(${PROJECT_NAME} Qt${QT_VERSION_MAJOR}::Core
     OpenSSL::SSL OpenSSL::Crypto
-    Qt6::Sql
+    # Qt6::Sql
+    Qt5::Sql
     zmq
     stdc++
 )
-
-
-
-

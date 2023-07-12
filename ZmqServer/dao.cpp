@@ -9,7 +9,7 @@ void Dao::SlotInsertMsg(std::string msg)
     try
     {
         static QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-        db.setHostName("127.0.0.1");
+        db.setHostName("mysql-server");
         db.setPort(3306);
         db.setDatabaseName(m_data_source.c_str());
         db.setUserName(m_user_name.c_str());
